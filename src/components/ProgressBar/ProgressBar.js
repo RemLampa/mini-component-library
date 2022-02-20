@@ -5,11 +5,9 @@ import styled from "styled-components";
 import { COLORS } from "../../constants";
 import VisuallyHidden from "../VisuallyHidden";
 
-const FillColor = styled.div`
-  --end-border-radius: ${(props) => (props.value === 100 ? 4 : 0)}px;
-
+const Fill = styled.div`
   height: 100%;
-  width: ${(props) => props.value}%;
+  width: var(--width);
   background-color: ${COLORS.primary};
   border-radius: 4px var(--end-border-radius) var(--end-border-radius) 4px;
 `;
@@ -24,7 +22,7 @@ const Container = styled.div`
   overflow: hidden;
 `;
 
-const variantStyles = {
+const computedContainerStyleVariables = {
   large: {
     "--height": "24px",
     "--padding": "4px",
@@ -41,9 +39,14 @@ const variantStyles = {
 };
 
 const ProgressBar = ({ value, size }) => {
+  const computedFillStyleVariables = {
+    "--end-border-radius": value >= 100 ? "4px" : "0px",
+    "--width": `${value}%`,
+  };
+
   return (
-    <Container style={variantStyles[size]}>
-      <FillColor value={value} />
+    <Container style={computedContainerStyleVariables[size]}>
+      <Fill style={computedFillStyleVariables} value={value} />
       <VisuallyHidden>{value}%</VisuallyHidden>
     </Container>
   );
